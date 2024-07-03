@@ -22,7 +22,15 @@
         lib = {
           inherit forEachSystem;
         };
+        ft_nvim = import ./nix/pkgs/ft_nvim.nix {
+          stdenv = pkgs.stdenvNoCC;
+        };
       }
     );
+    overlays = {
+      default = final: _: {
+        ft_nvim = self.packages.${final.system}.ft_nvim;
+      };
+    };
   };
 }
