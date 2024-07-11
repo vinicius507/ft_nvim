@@ -38,7 +38,7 @@ local function setup_autocmds(opts)
 end
 
 return {
-	---@param opts ft_nvim.NorminetteConfig
+	---@type fun(opts: ft_nvim.NorminetteConfig)
 	setup = function(opts)
 		if not opts.enabled then
 			return
@@ -49,5 +49,26 @@ return {
 		end
 
 		setup_autocmds(opts)
+		require("ft_nvim.norminette.commands").setup()
+	end,
+	---@type fun(opts: unknown): boolean
+	validate = function(opts)
+		if type(opts) ~= "table" then
+			return false
+		end
+
+		if opts.enabled ~= nil and type(opts.enabled) ~= "boolean" then
+			return false
+		end
+
+		if opts.cmd ~= nil and type(opts.cmd) ~= "string" then
+			return false
+		end
+
+		if opts.condition ~= nil and type(opts.condition) ~= "function" then
+			return false
+		end
+
+		return true
 	end,
 }
