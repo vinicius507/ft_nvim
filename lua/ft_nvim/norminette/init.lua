@@ -18,25 +18,6 @@
 ---})
 ---@endcode
 
----@type fun(opts: ft_nvim.NorminetteConfig)
-local function setup_autocmds(opts)
-	vim.api.nvim_create_autocmd({ "BufRead", "BufWritePost" }, {
-		group = vim.api.nvim_create_augroup("Norminette", { clear = true }),
-		desc = "Lint with Norminette",
-		pattern = { "*.c", "*.h" },
-		callback = function()
-			if vim.w.normeignore then
-				return -- Ignore windows with normeignore set
-			end
-			if opts.condition and opts.condition() then
-				return
-			end
-
-			require("lint").try_lint(opts.cmd)
-		end,
-	})
-end
-
 return {
 	---@type fun(opts: ft_nvim.NorminetteConfig)
 	setup = function(opts)
@@ -48,7 +29,7 @@ return {
 			error("Missing required dependency: 'nvim-lint'")
 		end
 
-		setup_autocmds(opts)
+		require("ft_nvim.norminette.autocmds").setup(opts)
 		require("ft_nvim.norminette.commands").setup()
 	end,
 	---@type fun(opts: unknown): boolean
