@@ -61,7 +61,10 @@ local function setup_nvim_lint(opts)
 			if vim.w.normeignore then
 				return false
 			end
-			return opts.condition()
+			if opts.condition ~= nil then
+				return opts.condition()
+			end
+			return true
 		end,
 	}
 	table.insert(lint.linters_by_ft.c, "norminette")
