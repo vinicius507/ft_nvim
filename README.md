@@ -14,8 +14,7 @@ Neovim plugin for [École 42](https://42.fr).
 **Requirements:**
 
 - [Neovim](https://github.com/neovim/neovim) >= 0.6.0
-- [nvim-lint](https://github.com/mfussenegger/nvim-lint) (Optional, used for
-  norminette integration)
+- [nvim-lint](https://github.com/mfussenegger/nvim-lint) (Optional, used for norminette integration)
 
 You can install the plugin using your favorite package manager:
 
@@ -52,8 +51,7 @@ git clone --depth 1 https://github.com/vinicius507/ft_nvim \
 
 ## Configuration
 
-The plugin can be configured by calling the `setup` function and passing an
-optional configuration object.
+The plugin can be configured by calling the `setup` function and passing an optional configuration object.
 
 The following options are available:
 

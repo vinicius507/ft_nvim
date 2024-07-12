@@ -4,9 +4,7 @@ README.md
 
 ## Norminette
 
-42 Nvim provides integration with
-[norminette](https://github.com/42School/norminette) as a diagnostics source
-using [nvim-lint](https://github.com/mfussenegger/nvim-lint).
+42 Nvim provides integration with [norminette](https://github.com/42School/norminette) as a diagnostics source using [nvim-lint](https://github.com/mfussenegger/nvim-lint).
 
 ### Commands
 
