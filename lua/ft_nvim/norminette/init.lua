@@ -18,20 +18,19 @@
 ---})
 ---@endcode
 
-local bufname = function()
-	return vim.api.nvim_buf_get_name(0)
-end
-local bufcontent = function()
+local function bufcontent()
 	local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
 	lines[#lines + 1] = "" -- Add a newline at the end
 	return table.concat(lines, "\n")
 end
-local filetype = function()
+
+local function filetype()
 	local ext = vim.fn.expand("%:e")
 	return ext == "h" and "--hfile" or "--cfile"
 end
 
-local function setup_nvim_lint()
+---@type fun(opts: ft_nvim.NorminetteConfig)
+local function setup_nvim_lint(opts)
 	local ok, lint = pcall(require, "lint")
 
 	if not ok then
@@ -39,9 +38,8 @@ local function setup_nvim_lint()
 	end
 
 	lint.linters.norminette = {
-		cmd = "norminette",
-		args = { "--filename", bufname, filetype, bufcontent },
-		append_fname = false,
+		cmd = opts.cmd,
+		args = { filetype, bufcontent, "--filename" },
 		ignore_exitcode = true,
 		name = "Norminette",
 		stream = "stdout",
@@ -54,7 +52,10 @@ local function setup_nvim_lint()
 			}
 		),
 		condition = function()
-			return vim.w.normeignore ~= false
+			if vim.w.normeignore then
+				return false
+			end
+			return opts.condition()
 		end,
 	}
 	table.insert(lint.linters_by_ft.c, "norminette")
@@ -68,7 +69,7 @@ return {
 			return
 		end
 
-		setup_nvim_lint()
+		setup_nvim_lint(opts)
 
 		require("ft_nvim.norminette.autocmds").setup(opts)
 		require("ft_nvim.norminette.commands").setup()
