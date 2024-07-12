@@ -12,12 +12,21 @@
 ---})
 ---@endcode
 
+local header = require("ft_nvim.header.header")
+
 return {
 	---@type fun(opts: ft_nvim.HeaderConfig)
 	setup = function(opts)
 		if not opts.enabled then
 			return
 		end
+
+		vim.api.nvim_create_autocmd("BufWritePre", {
+			group = vim.api.nvim_create_augroup("FtHeader", { clear = true }),
+			callback = function(ctx)
+				header.update(ctx.buf, opts)
+			end,
+		})
 	end,
 	---@type fun(opts: unknown): boolean
 	validate = function(opts)
