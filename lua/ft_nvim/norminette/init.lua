@@ -51,26 +51,7 @@ local function setup_nvim_lint(opts)
 				Error = vim.diagnostic.severity.ERROR,
 			}
 		),
-		condition = function()
-			local ext = vim.fn.expand("%:e")
-
-			-- NOTE: Only run on C and H files. Neovim considers .h files as having the cpp filetype
-			if ext ~= "c" and ext ~= "h" then
-				return false
-			end
-			if vim.w.normeignore then
-				return false
-			end
-			if opts.condition ~= nil then
-				return opts.condition()
-			end
-			return true
-		end,
 	}
-	vim.tbl_deep_extend("force", lint.linters_by_ft, {
-		c = { "norminette" },
-		cpp = { "norminette" },
-	})
 end
 
 return {
