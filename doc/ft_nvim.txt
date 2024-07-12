@@ -28,8 +28,7 @@ INSTALLATION                                    *ft_nvim-42-nvim-installation*
 **Requirements:**
 
 - Neovim <https://github.com/neovim/neovim> >= 0.6.0
-- nvim-lint <https://github.com/mfussenegger/nvim-lint> (Optional, used for
-    norminette integration)
+- nvim-lint <https://github.com/mfussenegger/nvim-lint> (Optional, used for norminette integration)
 
 You can install the plugin using your favorite package manager:
 
