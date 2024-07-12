@@ -2,6 +2,16 @@
 README.md
 ```
 
+## Header
+
+42 Nvim provides a 42 header integration for various filetypes.
+
+### Commands
+
+:FtHeader
+
+: Inserts/updates the 42 header for the current file.
+
 ## Norminette
 
 42 Nvim provides integration with [norminette](https://github.com/42School/norminette) as a diagnostics source using [nvim-lint](https://github.com/mfussenegger/nvim-lint).
