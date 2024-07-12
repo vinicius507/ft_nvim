@@ -3,6 +3,10 @@ local function reset_diagnostics()
 	vim.diagnostic.reset(ns)
 end
 
+local function run_diagnostics()
+	vim.api.nvim_exec_autocmds("BufWritePost", { group = "Norminette" })
+end
+
 ---@type table<string, ft_nvim.Command>
 local cmds = {
 	disable = {
@@ -14,13 +18,14 @@ local cmds = {
 	enable = {
 		impl = function()
 			vim.w.normeignore = false
+			run_diagnostics()
 		end,
 	},
 	toggle = {
 		impl = function()
 			if vim.w.normeignore then
 				vim.w.normeignore = false
-				vim.api.nvim_exec_autocmds("BufWritePost", { group = "Norminette" })
+				run_diagnostics()
 				return
 			end
 
