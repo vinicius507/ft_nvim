@@ -1,6 +1,11 @@
 name: Generate docs
 
 on:
+  pull_request:
+    paths:
+      - README.md
+      - docs/ft_nvim.md
+      - .github/workflows/docs.yml
   push:
     branches: [main]
     paths:
