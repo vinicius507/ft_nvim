@@ -1,8 +1,14 @@
+local function reset_diagnostics()
+	local ns = vim.api.nvim_get_namespaces().Norminette
+	vim.diagnostic.reset(ns)
+end
+
 ---@type table<string, ft_nvim.Command>
 local cmds = {
 	disable = {
 		impl = function()
 			vim.w.normeignore = true
+			reset_diagnostics()
 		end,
 	},
 	enable = {
@@ -17,10 +23,9 @@ local cmds = {
 				vim.api.nvim_exec_autocmds("BufWritePost", { group = "Norminette" })
 				return
 			end
-			local ns = vim.api.nvim_get_namespaces().Norminette
 
 			vim.w.normeignore = true
-			vim.diagnostic.reset(ns)
+			reset_diagnostics()
 		end,
 	},
 }
