@@ -52,6 +52,12 @@ local function setup_nvim_lint(opts)
 			}
 		),
 		condition = function()
+			local ext = vim.fn.expand("%:e")
+
+			-- NOTE: Only run on C and H files. Neovim considers .h files as having the cpp filetype
+			if ext ~= "c" and ext ~= "h" then
+				return false
+			end
 			if vim.w.normeignore then
 				return false
 			end
