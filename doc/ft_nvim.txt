@@ -7,6 +7,7 @@ Table of Contents                                  *ft_nvim-table-of-contents*
   - Features                                        |ft_nvim-42-nvim-features|
   - Installation                                |ft_nvim-42-nvim-installation|
   - Configuration                              |ft_nvim-42-nvim-configuration|
+  - Header                                            |ft_nvim-42-nvim-header|
   - Norminette                                    |ft_nvim-42-nvim-norminette|
 
 ==============================================================================
@@ -38,6 +39,7 @@ You can install the plugin using your favorite package manager:
     ---@type LazySpec
     return {
     	"vinicius507/ft_nvim",
+    	cmd = { "FtHeader", "Norme" }, -- Lazy load the commands.
     	ft = { "c", "cpp" }, -- Lazy load for .c and .h files.
     	---@type ft_nvim.Config
     	opts = {},
@@ -49,6 +51,7 @@ You can install the plugin using your favorite package manager:
 >lua
     use({
     	"vinicius507/ft_nvim",
+    	cmd = { "FtHeader", "Norme" }, -- Lazy load the commands.
     	ft = { "c", "cpp" }, -- Lazy load for .c and .h files.
     	config = function()
     		require("ft_nvim").setup()
@@ -73,6 +76,15 @@ The following options are available:
 
 >lua
     require("ft_nvim").setup({
+    	-- Configures the 42 Header integration
+    	header = {
+    		-- Enable the 42 Header integration (default: true).
+    		enable = true,
+    		-- Your Intranet username (default: "marvin").
+    		username = "marvin",
+    		-- Your Intranet email (default: "marvin@42.fr").
+    		email = "marvin@42.fr",
+    	},
     	-- Configures the norminette integration.
     	norminette = {
     		-- Enable the norminette integration (default: true).
@@ -86,6 +98,22 @@ The following options are available:
     	},
     })
 <
+
+
+HEADER                                                *ft_nvim-42-nvim-header*
+
+42 Nvim provides a 42 header integration for various filetypes.
+
+
+COMMANDS ~
+
+
+                                                         *ft_nvim-:FtHeader*
+
+
+:FtHeader                              Inserts/updates the 42 header for the current file.
+
+
 
 
 NORMINETTE                                        *ft_nvim-42-nvim-norminette*
