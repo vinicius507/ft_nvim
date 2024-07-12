@@ -118,6 +118,11 @@ local function lines_are_header(lines)
 end
 
 return {
+	---@type fun(bufnr: number): boolean
+	buf_has_header = function(bufnr)
+		local lines = vim.api.nvim_buf_get_lines(bufnr, 0, #TEMPLATE, false)
+		return lines_are_header(lines)
+	end,
 	---@type fun(bufnr: number, opts: ft_nvim.HeaderConfig)
 	insert = function(bufnr, opts)
 		local header = {

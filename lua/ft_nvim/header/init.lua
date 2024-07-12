@@ -21,6 +21,13 @@ return {
 			return
 		end
 
+		vim.api.nvim_create_user_command("FtHeader", function()
+			if header.buf_has_header(0) then
+				header.update(0, opts)
+			end
+			header.insert(0, opts)
+		end, { desc = "Upsert École 42 header" })
+
 		vim.api.nvim_create_autocmd("BufWritePre", {
 			group = vim.api.nvim_create_augroup("FtHeader", { clear = true }),
 			callback = function(ctx)
