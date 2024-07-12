@@ -67,8 +67,10 @@ local function setup_nvim_lint(opts)
 			return true
 		end,
 	}
-	table.insert(lint.linters_by_ft.c, "norminette")
-	table.insert(lint.linters_by_ft.cpp, "norminette")
+	vim.tbl_deep_extend("force", lint.linters_by_ft, {
+		c = { "norminette" },
+		cpp = { "norminette" },
+	})
 end
 
 return {
