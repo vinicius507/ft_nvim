@@ -1,0 +1,27 @@
+name: Generate docs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - README.md
+      - docs/ft_nvim.md
+      - .github/workflows/docs.yml
+
+permissions:
+  contents: write
+
+jobs:
+  docs:
+    name: Pandoc to vimdoc
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: kdheepak/panvimdoc@main
+        with:
+          vimdoc: ${{ github.event.repository.name }}
+          version: "NVIM v0.6.0"
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          branch: ${{ github.head_ref }}
+          commit_message: "ci(docs): Auto generate docs"
