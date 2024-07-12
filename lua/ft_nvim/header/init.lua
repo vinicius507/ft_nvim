@@ -24,6 +24,7 @@ return {
 		vim.api.nvim_create_user_command("FtHeader", function()
 			if header.buf_has_header(0) then
 				header.update(0, opts)
+				return
 			end
 			header.insert(0, opts)
 		end, { desc = "Upsert École 42 header" })
