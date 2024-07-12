@@ -7,6 +7,7 @@ Neovim plugin for [École 42](https://42.fr).
 
 ## Features
 
+- **42 Header**: Utilities to manage the 42 header in your files.
 - **Norminette Integration**: Use [norminette](https://github.com/42School/norminette) as a diagnostics source.
 
 ## Installation
