@@ -6,6 +6,12 @@ return {
 			desc = "Lint with Norminette",
 			pattern = { "*.c", "*.h" },
 			callback = function()
+				local ext = vim.fn.expand("%:e")
+
+				-- Only run on C and H files. Neovim considers .h files as having the cpp filetype
+				if ext ~= "c" and ext ~= "h" then
+					return false
+				end
 				-- Ignore windows with normeignore set
 				if vim.w.normeignore then
 					return
@@ -15,7 +21,7 @@ return {
 					return
 				end
 
-				require("lint").try_lint(opts.cmd)
+				require("lint").try_lint("norminette")
 			end,
 		})
 	end,
