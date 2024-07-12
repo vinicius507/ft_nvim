@@ -125,7 +125,9 @@ return {
 			username = opts.username,
 			email = opts.email,
 			created_at = vim.fn.strftime("%Y/%m/%d %H:%M:%S"),
+			created_by = opts.username,
 			updated_at = vim.fn.strftime("%Y/%m/%d %H:%M:%S"),
+			updated_by = opts.username,
 		}
 		local lines = serialize(header)
 
