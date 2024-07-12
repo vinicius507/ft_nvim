@@ -18,6 +18,49 @@
 ---})
 ---@endcode
 
+local bufname = function()
+	return vim.api.nvim_buf_get_name(0)
+end
+local bufcontent = function()
+	local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+	lines[#lines + 1] = "" -- Add a newline at the end
+	return table.concat(lines, "\n")
+end
+local filetype = function()
+	local ext = vim.fn.expand("%:e")
+	return ext == "h" and "--hfile" or "--cfile"
+end
+
+local function setup_nvim_lint()
+	local ok, lint = pcall(require, "lint")
+
+	if not ok then
+		error("Missing required dependency: 'nvim-lint'")
+	end
+
+	lint.linters.norminette = {
+		cmd = "norminette",
+		args = { "--filename", bufname, filetype, bufcontent },
+		append_fname = false,
+		ignore_exitcode = true,
+		name = "Norminette",
+		stream = "stdout",
+		parser = require("lint.parser").from_pattern(
+			"(%w+): ([^%s]+) +%(line: +(%d+), col: +(%d+)%):\t(.*)",
+			{ "severity", "code", "lnum", "col", "message" },
+			{
+				Notice = vim.diagnostic.severity.WARN,
+				Error = vim.diagnostic.severity.ERROR,
+			}
+		),
+		condition = function()
+			return vim.w.normeignore ~= false
+		end,
+	}
+	table.insert(lint.linters_by_ft.c, "norminette")
+	table.insert(lint.linters_by_ft.cpp, "norminette")
+end
+
 return {
 	---@type fun(opts: ft_nvim.NorminetteConfig)
 	setup = function(opts)
@@ -25,9 +68,7 @@ return {
 			return
 		end
 
-		if not pcall(require, "lint") then
-			error("Missing required dependency: 'nvim-lint'")
-		end
+		setup_nvim_lint()
 
 		require("ft_nvim.norminette.autocmds").setup(opts)
 		require("ft_nvim.norminette.commands").setup()
