@@ -12,8 +12,6 @@
 ---})
 ---@endcode
 
-local header = require("ft_nvim.header.header")
-
 ---@type ft_nvim.HeaderConfig
 local default_opts = {
 	enabled = true,
@@ -35,19 +33,7 @@ return {
 			return
 		end
 
-		vim.api.nvim_create_user_command("FtHeader", function()
-			if header.buf_has_header(0) then
-				header.update(0, opts)
-				return
-			end
-			header.insert(0, opts)
-		end, { desc = "Upsert École 42 header" })
-
-		vim.api.nvim_create_autocmd("BufWritePre", {
-			group = vim.api.nvim_create_augroup("FtHeader", { clear = true }),
-			callback = function(ctx)
-				header.update(ctx.buf, opts)
-			end,
-		})
+		require("ft_nvim.header.autocmds").setup(opts)
+		require("ft_nvim.header.commands").setup(opts)
 	end,
 }
