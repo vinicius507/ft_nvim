@@ -6,6 +6,7 @@
 ---@field created_by string
 ---@field updated_at string
 ---@field updated_by string
+---@field delimeters ft_nvim.Delimeters
 
 local delimeters = require("ft_nvim.header.delimeters")
 local TEMPLATE = {
@@ -60,7 +61,6 @@ end
 local function serialize(header)
 	local lines = TEMPLATE
 	local annotated_lines = { 4, 6, 8, 9 }
-	local delims = delimeters[vim.bo.filetype] or delimeters.default
 
 	for _, lineno in ipairs(annotated_lines) do
 		lines[lineno] = string.gsub(lines[lineno], "(@([%w_]*)%.*)", function(match, key)
@@ -78,7 +78,7 @@ local function serialize(header)
 			)
 		end)
 	end
-	lines = vim.tbl_map(set_delimeters(delims), lines)
+	lines = vim.tbl_map(set_delimeters(header.delimeters), lines)
 	table.insert(lines, "")
 	return lines
 end
@@ -133,6 +133,7 @@ return {
 			created_by = opts.username,
 			updated_at = vim.fn.strftime("%Y/%m/%d %H:%M:%S"),
 			updated_by = opts.username,
+			delimeters = delimeters[vim.bo.filetype] or delimeters.default,
 		}
 		local lines = serialize(header)
 
@@ -141,7 +142,7 @@ return {
 	---@type fun(bufnr: number, opts: ft_nvim.HeaderConfig)
 	update = function(bufnr, opts)
 		local header = {}
-		local lines = vim.api.nvim_buf_get_lines(bufnr, 0, #TEMPLATE, false)
+		local lines = vim.api.nvim_buf_get_lines(bufnr, 0, #TEMPLATE + 1, false)
 
 		if not lines_are_header(lines) then
 			return
@@ -162,9 +163,10 @@ return {
 				end
 			end
 		end
+		header.delimeters = { string.match(lines[1], "^([^%s]+) .* ([^%s]+)$") }
 		header.updated_at = vim.fn.strftime("%Y/%m/%d %H:%M:%S")
 		header.updated_by = opts.username
 		lines = serialize(header)
-		vim.api.nvim_buf_set_lines(bufnr, 0, 12, false, lines)
+		vim.api.nvim_buf_set_lines(bufnr, 0, #TEMPLATE + 1, false, lines)
 	end,
 }
