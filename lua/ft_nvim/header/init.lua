@@ -14,9 +14,23 @@
 
 local header = require("ft_nvim.header.header")
 
+---@type ft_nvim.HeaderConfig
+local default_opts = {
+	enabled = true,
+	username = "marvin",
+	email = "marvin@42.fr",
+}
+
 return {
 	---@type fun(opts: ft_nvim.HeaderConfig)
 	setup = function(opts)
+		opts = vim.tbl_extend("force", opts or {}, default_opts)
+		vim.validate({
+			enabled = { opts.enabled, "boolean" },
+			username = { opts.username, "string", true },
+			email = { opts.email, "string", true },
+		})
+
 		if not opts.enabled then
 			return
 		end
@@ -35,25 +49,5 @@ return {
 				header.update(ctx.buf, opts)
 			end,
 		})
-	end,
-	---@type fun(opts: unknown): boolean
-	validate = function(opts)
-		if type(opts) ~= "table" then
-			return false
-		end
-
-		if opts.enabled ~= nil and type(opts.enabled) ~= "boolean" then
-			return false
-		end
-
-		if opts.username ~= nil and type(opts.username) ~= "string" then
-			return false
-		end
-
-		if opts.email ~= nil and type(opts.email) ~= "string" then
-			return false
-		end
-
-		return true
 	end,
 }

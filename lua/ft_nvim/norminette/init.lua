@@ -18,6 +18,12 @@
 ---})
 ---@endcode
 
+---@type ft_nvim.NorminetteConfig
+local default_opts = {
+	enabled = true,
+	cmd = "norminette",
+}
+
 local function bufcontent()
 	local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
 	lines[#lines + 1] = "" -- Add a newline at the end
@@ -57,6 +63,13 @@ end
 return {
 	---@type fun(opts: ft_nvim.NorminetteConfig)
 	setup = function(opts)
+		opts = vim.tbl_extend("force", opts or {}, default_opts)
+		vim.validate({
+			enabled = { opts.enabled, "boolean" },
+			cmd = { opts.cmd, "string", true },
+			condition = { opts.condition, "function", true },
+		})
+
 		if not opts.enabled then
 			return
 		end
@@ -65,25 +78,5 @@ return {
 
 		require("ft_nvim.norminette.autocmds").setup(opts)
 		require("ft_nvim.norminette.commands").setup()
-	end,
-	---@type fun(opts: unknown): boolean
-	validate = function(opts)
-		if type(opts) ~= "table" then
-			return false
-		end
-
-		if opts.enabled ~= nil and type(opts.enabled) ~= "boolean" then
-			return false
-		end
-
-		if opts.cmd ~= nil and type(opts.cmd) ~= "string" then
-			return false
-		end
-
-		if opts.condition ~= nil and type(opts.condition) ~= "function" then
-			return false
-		end
-
-		return true
 	end,
 }
