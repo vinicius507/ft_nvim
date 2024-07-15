@@ -103,6 +103,7 @@ local function lines_are_header(lines)
 		if vim.tbl_contains(annotated_lines, lineno) then
 			template_line = string.gsub(template_line, "@[%w_]+%.*", function(match)
 				local range = { string.find(template_line, match, 1, true) }
+				---@diagnostic disable-next-line: param-type-mismatch
 				return string.sub(line, unpack(range))
 			end)
 		end
