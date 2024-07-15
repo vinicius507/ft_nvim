@@ -59,7 +59,7 @@ end
 
 ---@type fun(header: ft_nvim.Header): string[]
 local function serialize(header)
-	local lines = TEMPLATE
+	local lines = { unpack(TEMPLATE) }
 	local annotated_lines = { 4, 6, 8, 9 }
 
 	for _, lineno in ipairs(annotated_lines) do
