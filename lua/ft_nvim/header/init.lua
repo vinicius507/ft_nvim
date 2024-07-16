@@ -22,7 +22,7 @@ local default_opts = {
 return {
 	---@type fun(opts: ft_nvim.HeaderConfig)
 	setup = function(opts)
-		opts = vim.tbl_extend("force", opts or {}, default_opts)
+		opts = vim.tbl_extend("force", default_opts, opts)
 		vim.validate({
 			enabled = { opts.enabled, "boolean" },
 			username = { opts.username, "string", true },

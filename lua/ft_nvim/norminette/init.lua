@@ -63,7 +63,7 @@ end
 return {
 	---@type fun(opts: ft_nvim.NorminetteConfig)
 	setup = function(opts)
-		opts = vim.tbl_extend("force", opts or {}, default_opts)
+		opts = vim.tbl_extend("force", default_opts, opts)
 		vim.validate({
 			enabled = { opts.enabled, "boolean" },
 			cmd = { opts.cmd, "string", true },
