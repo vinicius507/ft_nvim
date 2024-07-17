@@ -8,7 +8,6 @@
 ---@field updated_by string
 ---@field delimeters ft_nvim.Delimeters
 
-local delimeters = require("ft_nvim.header.delimeters")
 local TEMPLATE = {
 	"********************************************************************************",
 	"*                                                                              *",
@@ -118,56 +117,34 @@ local function lines_are_header(lines)
 	return true
 end
 
-return {
-	---@type fun(bufnr: number): boolean
-	buf_has_header = function(bufnr)
-		local lines = vim.api.nvim_buf_get_lines(bufnr, 0, #TEMPLATE, false)
-		return lines_are_header(lines)
-	end,
-	---@type fun(bufnr: number, opts: ft_nvim.HeaderConfig)
-	insert = function(bufnr, opts)
-		local header = {
-			filename = vim.fn.expand("%:t"),
-			username = opts.username,
-			email = opts.email,
-			created_at = vim.fn.strftime("%Y/%m/%d %H:%M:%S"),
-			created_by = opts.username,
-			updated_at = vim.fn.strftime("%Y/%m/%d %H:%M:%S"),
-			updated_by = opts.username,
-			delimeters = delimeters[vim.bo.filetype] or delimeters.default,
-		}
-		local lines = serialize(header)
+---@type fun(lines: string[]): ft_nvim.Header?
+local function fromlines(lines)
+	local header = {}
 
-		vim.api.nvim_buf_set_lines(bufnr, 0, 0, false, lines)
-	end,
-	---@type fun(bufnr: number, opts: ft_nvim.HeaderConfig)
-	update = function(bufnr, opts)
-		local header = {}
-		local lines = vim.api.nvim_buf_get_lines(bufnr, 0, #TEMPLATE + 1, false)
+	if not lines_are_header(lines) then
+		return nil
+	end
+	header.delimeters = { string.match(lines[1], "^([^%s]+) .* ([^%s]+)$") }
+	for lineno, template_line in ipairs(TEMPLATE) do
+		local line = lines[lineno]
 
-		if not lines_are_header(lines) then
-			return
-		end
+		for annotation, key in string.gmatch(template_line, "(@([%w_]+)%.*)") do
+			key = key:lower()
+			local range = { string.find(template_line, annotation) }
 
-		for lineno, template_line in ipairs(TEMPLATE) do
-			local line = lines[lineno]
-
-			for annotation, key in string.gmatch(template_line, "(@([%w_]+)%.*)") do
-				key = key:lower()
-				local range = { string.find(template_line, annotation) }
-				if key == "author" then
-					header.username = string.match(line, "(%w+) <.*>")
-					header.email = string.match(line, "%w+ <(.*)>")
-				else
-					---@diagnostic disable-next-line: param-type-mismatch
-					header[key] = vim.fn.trim(string.sub(line, unpack(range)))
-				end
+			if key == "author" then
+				header.username = string.match(line, "(%w+) <.*>")
+				header.email = string.match(line, "%w+ <(.*)>")
+			else
+				---@diagnostic disable-next-line: param-type-mismatch
+				header[key] = vim.fn.trim(string.sub(line, unpack(range)))
 			end
 		end
-		header.delimeters = { string.match(lines[1], "^([^%s]+) .* ([^%s]+)$") }
-		header.updated_at = vim.fn.strftime("%Y/%m/%d %H:%M:%S")
-		header.updated_by = opts.username
-		lines = serialize(header)
-		vim.api.nvim_buf_set_lines(bufnr, 0, #TEMPLATE + 1, false, lines)
-	end,
+	end
+	return header
+end
+
+return {
+	serialize = serialize,
+	fromlines = fromlines,
 }
