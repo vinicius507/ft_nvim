@@ -1,7 +1,7 @@
 ---@class ft_nvim.HeaderConfig
----@field enabled boolean
----@field username string?
----@field email string?
+---@field enabled? boolean
+---@field username? string
+---@field email? string
 ---
 ---Example:
 ---@code
@@ -22,9 +22,10 @@ local default_opts = {
 return {
 	---@type fun(opts: ft_nvim.HeaderConfig)
 	setup = function(opts)
-		opts = vim.tbl_extend("force", default_opts, opts)
+		opts = vim.tbl_extend("force", default_opts, opts or {})
+
 		vim.validate({
-			enabled = { opts.enabled, "boolean" },
+			enabled = { opts.enabled, "boolean", true },
 			username = { opts.username, "string", true },
 			email = { opts.email, "string", true },
 		})

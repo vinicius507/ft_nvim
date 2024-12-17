@@ -1,5 +1,5 @@
 ---@class ft_nvim.NorminetteConfig
----@field enabled boolean
+---@field enabled? boolean
 ---@field cmd? string
 ---@field condition? fun(): boolean
 ---
@@ -63,9 +63,10 @@ end
 return {
 	---@type fun(opts: ft_nvim.NorminetteConfig)
 	setup = function(opts)
-		opts = vim.tbl_extend("force", default_opts, opts)
+		opts = vim.tbl_extend("force", default_opts, opts or {})
+
 		vim.validate({
-			enabled = { opts.enabled, "boolean" },
+			enabled = { opts.enabled, "boolean", true },
 			cmd = { opts.cmd, "string", true },
 			condition = { opts.condition, "function", true },
 		})
