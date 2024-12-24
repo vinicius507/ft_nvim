@@ -1,3 +1,5 @@
+local delimeters = require("ft_nvim.header.delimeters")
+
 ---@class ft_nvim.Header
 ---@field filename string
 ---@field username string
@@ -8,7 +10,6 @@
 ---@field updated_by string
 ---@field delimeters ft_nvim.Delimeters
 
-local delimeters = require("ft_nvim.header.delimeters")
 local TEMPLATE = {
 	"********************************************************************************",
 	"*                                                                              *",
@@ -23,15 +24,34 @@ local TEMPLATE = {
 	"********************************************************************************",
 }
 
+local TMPL_LINE_LEN = 44
+
+---@param str string
+---@param max_len integer
+---@return string
+local function ellipsize(str, max_len)
+	if str:len() <= max_len then
+		return str
+	end
+	return str:sub(1, max_len - 3) .. "..."
+end
+
 ---@alias ft_nvim.FieldKey "filename" | "author" | "created_at" | "updated_at" | "created_by" | "updated_by"
 
 ---@type table<ft_nvim.FieldKey, fun(header: ft_nvim.Header): string>
 local fields = {
 	filename = function(header)
-		return header.filename
+		return ellipsize(header.filename, TMPL_LINE_LEN)
 	end,
 	author = function(header)
-		return string.format("%s <%s>", header.username, header.email)
+		local title_len = 4 -- 'By: '
+		local fixed_chars = 3 -- ' <>'
+
+		return string.format(
+			"%s <%s>",
+			header.username,
+			ellipsize(header.email, TMPL_LINE_LEN - title_len - fixed_chars - header.username:len())
+		)
 	end,
 	created_at = function(header)
 		return header.created_at
