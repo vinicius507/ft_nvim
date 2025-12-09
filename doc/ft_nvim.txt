@@ -1,4 +1,4 @@
-*ft_nvim.txt*           For NVIM v0.6.0          Last change: 2025 November 24
+*ft_nvim.txt*           For NVIM v0.6.0          Last change: 2025 December 09
 
 ==============================================================================
 Table of Contents                                  *ft_nvim-table-of-contents*
