@@ -2,9 +2,6 @@
 
 Neovim plugin for [École 42](https://42.fr).
 
-> [!NOTE]
-> This plugin is still in early development. Breaking changes are expected.
-
 ## Features
 
 - **42 Header**: Utilities to manage the 42 header in your files.
