@@ -22,7 +22,7 @@ jobs:
           vimdoc: ${{ github.event.repository.name }}
           pandoc: doc/ft_nvim.md
           version: "NVIM v0.6.0"
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - uses: stefanzweifel/git-auto-commit-action@v7
         with:
           branch: ${{ github.head_ref }}
           commit_message: "ci(docs): Auto generate docs"
