@@ -37,11 +37,16 @@ end
 
 ---@type fun(opts: ft_nvim.NorminetteConfig): boolean
 local function setup_nvim_lint(opts)
-	if not package.loaded["lint"] then
+	local ok, lint = pcall(require, "lint")
+
+	if not ok then
+		vim.notify("nvim-lint is not installed. Please install it to use ft_nvim.norminette.", vim.log.levels.WARN, {
+			title = "ft_nvim",
+		})
 		return false
 	end
 
-	require("lint").linters.norminette = {
+	lint.linters.norminette = {
 		cmd = opts.cmd,
 		args = { filetype, bufcontent, "--filename" },
 		ignore_exitcode = true,
