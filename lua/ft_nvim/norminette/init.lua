@@ -48,7 +48,7 @@ local function setup_nvim_lint(opts)
 
 	lint.linters.norminette = {
 		cmd = opts.cmd,
-		args = { filetype, bufcontent, "--filename" },
+		args = { filetype, bufcontent, "--no-colors", "--filename" },
 		ignore_exitcode = true,
 		name = "Norminette",
 		stream = "stdout",
