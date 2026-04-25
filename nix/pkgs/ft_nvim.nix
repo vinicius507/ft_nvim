@@ -1,9 +1,15 @@
-{stdenv}:
-stdenv.mkDerivation {
-  name = "ft_nvim";
+{
+  self,
+  lib,
+  vimUtils,
+}:
+vimUtils.buildVimPlugin {
+  pname = "ft_nvim";
+  version = self.rev or self.dirtyRev or "unknown";
   src = ../..;
-  installPhase = ''
-    mkdir -p $out
-    cp -r $src/* $out/
-  '';
+  meta = {
+    description = "A Neovim plugin for École 42";
+    homepage = "https://github.com/vinicius507/ft_nvim";
+    license = lib.licenses.mit;
+  };
 }
