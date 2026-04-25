@@ -17,12 +17,6 @@
           };
         });
   in {
-    lib = forEachSystem ({pkgs}: {
-      inherit forEachSystem;
-      mkShell = pkgs.mkShell.override {
-        inherit (pkgs.llvmPackages_12) stdenv;
-      };
-    });
     packages = forEachSystem ({pkgs}: {
       ft_nvim = import ./nix/pkgs/ft_nvim.nix {
         stdenv = pkgs.stdenvNoCC;
@@ -34,7 +28,7 @@
       };
     };
     devShells = forEachSystem ({pkgs}: {
-      default = self.lib.${pkgs.stdenv.hostPlatform.system}.mkShell {
+      default = pkgs.mkShell {
         packages = with pkgs; [
           norminette
         ];
