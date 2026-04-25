@@ -30,11 +30,11 @@
     });
     overlays = {
       default = final: _: {
-        ft_nvim = self.packages.${final.system}.ft_nvim;
+        inherit (self.packages.${final.stdenv.hostPlatform.system}) ft_nvim;
       };
     };
     devShells = forEachSystem ({pkgs}: {
-      default = self.lib.${pkgs.system}.mkShell {
+      default = self.lib.${pkgs.stdenv.hostPlatform.system}.mkShell {
         packages = with pkgs; [
           norminette
         ];
