@@ -18,9 +18,7 @@
         });
   in {
     packages = forEachSystem ({pkgs}: {
-      ft_nvim = import ./nix/pkgs/ft_nvim.nix {
-        stdenv = pkgs.stdenvNoCC;
-      };
+      ft_nvim = pkgs.callPackage ./nix/pkgs/ft_nvim.nix {inherit self;};
     });
     overlays = {
       default = final: _: {
